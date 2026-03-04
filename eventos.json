@@ -1,0 +1,786 @@
+[
+    {
+        "fecha": "02/07/26",
+        "principal": 5,
+        "mesas": [
+            {
+                "col": 2,
+                "fila": 1,
+                "personas": 10,
+                "nombre": "mama",
+                "color": "red"
+            },
+            {
+                "col": 5,
+                "fila": 1,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 2,
+                "fila": 2,
+                "personas": 10,
+                "nombre": "mama",
+                "color": "red"
+            },
+            {
+                "col": 5,
+                "fila": 2,
+                "personas": 10,
+                "nombre": "pastel",
+                "color": "pink"
+            },
+            {
+                "col": 2,
+                "fila": 3,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 5,
+                "fila": 3,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 2,
+                "fila": 4,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 3,
+                "fila": 4,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 4,
+                "fila": 4,
+                "personas": 10,
+                "nombre": "tios",
+                "color": "green"
+            },
+            {
+                "col": 5,
+                "fila": 4,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 3,
+                "fila": 5,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 4,
+                "fila": 5,
+                "personas": 5,
+                "nombre": null,
+                "color": "lightgray"
+            }
+        ]
+    },
+    {
+        "fecha": "02/14/26",
+        "principal": 6,
+        "mesas": [
+            {
+                "col": 1,
+                "fila": 1,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 2,
+                "fila": 1,
+                "personas": 10,
+                "nombre": "mama",
+                "color": "red"
+            },
+            {
+                "col": 5,
+                "fila": 1,
+                "personas": 10,
+                "nombre": "abuelo",
+                "color": "blue"
+            },
+            {
+                "col": 6,
+                "fila": 1,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 2,
+                "fila": 2,
+                "personas": 10,
+                "nombre": "mama",
+                "color": "red"
+            },
+            {
+                "col": 5,
+                "fila": 2,
+                "personas": 10,
+                "nombre": "pastel",
+                "color": "pink"
+            },
+            {
+                "col": 2,
+                "fila": 3,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 5,
+                "fila": 3,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 2,
+                "fila": 4,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 3,
+                "fila": 4,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 4,
+                "fila": 4,
+                "personas": 10,
+                "nombre": "brindis",
+                "color": "yellow"
+            },
+            {
+                "col": 5,
+                "fila": 4,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 2,
+                "fila": 5,
+                "personas": 8,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 3,
+                "fila": 5,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 4,
+                "fila": 5,
+                "personas": 8,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 5,
+                "fila": 5,
+                "personas": 8,
+                "nombre": null,
+                "color": "lightgray"
+            }
+        ]
+    },
+    {
+        "fecha": "03/07/26",
+        "principal": 6,
+        "mesas": [
+            {
+                "col": 2,
+                "fila": 1,
+                "personas": 10,
+                "nombre": "abuela",
+                "color": "red"
+            },
+            {
+                "col": 5,
+                "fila": 1,
+                "personas": 10,
+                "nombre": "amigos trabajo",
+                "color": "blue"
+            },
+            {
+                "col": 2,
+                "fila": 2,
+                "personas": 10,
+                "nombre": "abuela",
+                "color": "red"
+            },
+            {
+                "col": 5,
+                "fila": 2,
+                "personas": 10,
+                "nombre": "amigos trabajo",
+                "color": "blue"
+            },
+            {
+                "col": 2,
+                "fila": 3,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 3,
+                "fila": 3,
+                "personas": 10,
+                "nombre": "muñeca",
+                "color": "pink"
+            },
+            {
+                "col": 4,
+                "fila": 3,
+                "personas": 10,
+                "nombre": "padrino botella",
+                "color": "yellow"
+            },
+            {
+                "col": 5,
+                "fila": 3,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 2,
+                "fila": 4,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 3,
+                "fila": 4,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 4,
+                "fila": 4,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 5,
+                "fila": 4,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 2,
+                "fila": 5,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 3,
+                "fila": 5,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 4,
+                "fila": 5,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 5,
+                "fila": 5,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            }
+        ]
+    },
+    {
+        "fecha": "03/14/26",
+        "principal": 2,
+        "mesas": [
+            {
+                "col": 1,
+                "fila": 1,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 2,
+                "fila": 1,
+                "personas": 12,
+                "nombre": "padrino",
+                "color": "green"
+            },
+            {
+                "col": 5,
+                "fila": 1,
+                "personas": 10,
+                "nombre": "anillos",
+                "color": "red"
+            },
+            {
+                "col": 6,
+                "fila": 1,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 2,
+                "fila": 2,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 5,
+                "fila": 2,
+                "personas": 10,
+                "nombre": "anillos",
+                "color": "red"
+            },
+            {
+                "col": 2,
+                "fila": 3,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 3,
+                "fila": 3,
+                "personas": 10,
+                "nombre": "pastel",
+                "color": "pink"
+            },
+            {
+                "col": 4,
+                "fila": 3,
+                "personas": 10,
+                "nombre": "pastel",
+                "color": "pink"
+            },
+            {
+                "col": 5,
+                "fila": 3,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 2,
+                "fila": 4,
+                "personas": 11,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 3,
+                "fila": 4,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 4,
+                "fila": 4,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 5,
+                "fila": 4,
+                "personas": 11,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 3,
+                "fila": 5,
+                "personas": 12,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 4,
+                "fila": 5,
+                "personas": 12,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 5,
+                "fila": 5,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            }
+        ]
+    },
+    {
+        "fecha": "03/21/26",
+        "principal": 8,
+        "mesas": [
+            {
+                "col": 1,
+                "fila": 1,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 2,
+                "fila": 1,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 5,
+                "fila": 1,
+                "personas": 12,
+                "nombre": "pastel",
+                "color": "pink"
+            },
+            {
+                "col": 6,
+                "fila": 1,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 1,
+                "fila": 2,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 2,
+                "fila": 2,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 5,
+                "fila": 2,
+                "personas": 11,
+                "nombre": "pastel",
+                "color": "pink"
+            },
+            {
+                "col": 2,
+                "fila": 3,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 3,
+                "fila": 3,
+                "personas": 10,
+                "nombre": "brindis",
+                "color": "blue"
+            },
+            {
+                "col": 4,
+                "fila": 3,
+                "personas": 10,
+                "nombre": "botellas",
+                "color": "yellow"
+            },
+            {
+                "col": 5,
+                "fila": 3,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 2,
+                "fila": 4,
+                "personas": 9,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 3,
+                "fila": 4,
+                "personas": 9,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 4,
+                "fila": 4,
+                "personas": 9,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 5,
+                "fila": 4,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            }
+        ]
+    },
+    {
+        "fecha": "03/28/26",
+        "principal": 2,
+        "mesas": [
+            {
+                "col": 1,
+                "fila": 1,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 2,
+                "fila": 1,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 5,
+                "fila": 1,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 6,
+                "fila": 1,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 1,
+                "fila": 2,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 2,
+                "fila": 2,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 5,
+                "fila": 2,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 2,
+                "fila": 3,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 3,
+                "fila": 3,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 4,
+                "fila": 3,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 5,
+                "fila": 3,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 2,
+                "fila": 4,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 3,
+                "fila": 4,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 4,
+                "fila": 4,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 5,
+                "fila": 4,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            }
+        ]
+    },
+    {
+        "fecha": "03/06/26",
+        "principal": 2,
+        "mesas": [
+            {
+                "col": 1,
+                "fila": 1,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 2,
+                "fila": 1,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 5,
+                "fila": 1,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 6,
+                "fila": 1,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 1,
+                "fila": 2,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 2,
+                "fila": 2,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 5,
+                "fila": 2,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 2,
+                "fila": 3,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 3,
+                "fila": 3,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 4,
+                "fila": 3,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 5,
+                "fila": 3,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 2,
+                "fila": 4,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 3,
+                "fila": 4,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 4,
+                "fila": 4,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            },
+            {
+                "col": 5,
+                "fila": 4,
+                "personas": 10,
+                "nombre": null,
+                "color": "lightgray"
+            }
+        ]
+    }
+]
