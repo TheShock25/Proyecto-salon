@@ -1,0 +1,30 @@
+[
+    {
+        "fecha": "2026-06-04 17:39:39",
+        "articulos": [
+            {
+                "nombre": "cucharas",
+                "categoria": "plaque",
+                "total": 500,
+                "danadas": 0,
+                "costo_unitario": 15.0,
+                "notas": ""
+            }
+        ],
+        "notas": ""
+    },
+    {
+        "fecha": "2026-06-04 17:54:19",
+        "articulos": [
+            {
+                "nombre": "sillas",
+                "categoria": "sillas",
+                "total": 400,
+                "danadas": 50,
+                "costo_unitario": 200.0,
+                "notas": ""
+            }
+        ],
+        "notas": ""
+    }
+]

@@ -1,7 +1,4 @@
-# modelos.py
-#
-# Fachada de compatibilidad. Las clases reales viven en entidades/modelos.py.
-from entidades.modelos import (
+from .modelos import (
     Comentario,
     ComentarioEvento,
     ComentarioMesero,
