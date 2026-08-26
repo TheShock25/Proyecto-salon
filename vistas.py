@@ -17,6 +17,7 @@ from pantallas import (
     FrameMenuAdmin,
     FrameMenuCapitan,
     FrameMenuMesero,
+    FramePerfilSalon,
     FrameSeleccionFecha,
 )
 
@@ -32,6 +33,7 @@ __all__ = [
     "FrameCalendario",
     "FrameInventario",
     "FrameDashboardPatron",
+    "FramePerfilSalon",
     "FrameListaEventos",
     "FrameListaOrganizaciones",
     "FrameCompararEventos",

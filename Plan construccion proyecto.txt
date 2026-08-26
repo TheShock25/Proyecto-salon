@@ -1,0 +1,81 @@
+Dejar bien armada la base de datos/estructura
+Antes de crecer demasiado, conviene definir bien los datos:
+Salón
+Evento
+Organización del evento
+Inventario
+Mesero
+Perfil del mesero
+Oferta de trabajo
+Postulación
+Comentario/opinión
+Resultado del analizador
+Ahorita usamos JSON/CSV, pero más adelante yo sí movería esto a SQLite. Sigue siendo local, no necesitas servidor, pero queda mucho más ordenado que muchos JSON cuando crezca.
+
+Terminar Vista Patrón
+Ya está casi lista como base. Faltaría:
+Mejorar dashboard para que lea datos reales cuando existan.
+Dejar preparado el espacio para resultados del analizador.
+Completar consulta histórica de eventos.
+Pulir inventario/costos.
+Dejar el salón con perfil básico: nombre, dirección, teléfono, correo, logo, precio aproximado.
+
+Terminar Vista Capitán
+Esta sería la siguiente fuerte.
+Calcular meseros necesarios según mesas/personas.
+Mostrar servicios del evento en croquis: dulces, pastel, pantalla, cocina, animador.
+Permitir marcar ubicación de esos servicios.
+Mejorar eventos pasados.
+Dashboard por evento con propinas, comentarios y desempeño.
+Dejar preparada la lógica para “necesito más meseros”.
+
+Construir Vista Mesero local
+Sin login todavía, pero con perfiles simulados.
+Crear perfil de mesero.
+Registrar experiencia.
+Crear historial.
+Ver calendario de servicios.
+Opinar eventos.
+Ver reputación calculada.
+Preparar campos para habilidades, puntualidad, trato, experiencia, zonas.
+
+Crear módulo de ofertas
+Todavía local, pero ya con la lógica real.
+Capitán crea oferta: fecha, salón, pago, propina esperada, número de meseros requeridos.
+Mesero ve ofertas.
+Mesero se postula.
+Capitán acepta/rechaza.
+Se agrega al calendario del mesero.
+
+Crear Vista Usuario pública
+Esta puede esperar, porque depende de datos del salón.
+Buscar salones.
+Comparar precios.
+Ver disponibilidad.
+Ver reseñas agregadas.
+Ver cercanía después, cuando ya haya direcciones bien guardadas.
+
+Conectar analizador de sentimientos
+Estoy de acuerdo contigo: esto debe ir casi al final, cuando ya existan opiniones suficientes y dashboards listos.
+Primero dejamos los dashboards fijos. Luego el analizador llena:
+Opinión general del salón.
+Opinión general del patrón.
+Tendencias buenas/malas/neutrales.
+Alertas sin señalar personas directamente.
+Reputación del mesero.
+
+Login real y migración web
+Esto lo dejaría al final.
+Ahí sí tendría sentido:
+Login patrón.
+Login capitán.
+Login mesero.
+Login usuario público.
+Base de datos central.
+Roles.
+Ofertas reales por zona.
+Aplicación web o app móvil.
+
+Mi recomendación práctica
+Por ahora no hagamos login real. Usemos las vistas como “modo patrón”, “modo capitán”, “modo mesero”. Primero terminamos el sistema como prototipo completo.
+El siguiente bloque lógico sería terminar Capitán: cálculo de meseros necesarios, ubicación de servicios en croquis, y dashboard de evento pasado preparado para comentarios/propinas. Ahí dejamos cerrada la parte operativa del salón antes de entrar fuerte al mesero.

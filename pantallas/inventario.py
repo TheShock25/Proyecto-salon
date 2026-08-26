@@ -37,6 +37,17 @@ def normalizar_clave(valor):
     return str(valor or "").strip().lower().replace(" ", "_").replace("ñ", "n")
 
 
+def crear_texto_scroll(parent):
+    frame = tk.Frame(parent, bg=BG)
+    frame.pack(fill="both", expand=True, padx=12, pady=12)
+    texto = tk.Text(frame, wrap="word", bg="white", fg=TXT)
+    scrollbar = tk.Scrollbar(frame, orient="vertical", command=texto.yview)
+    texto.configure(yscrollcommand=scrollbar.set)
+    texto.pack(side="left", fill="both", expand=True)
+    scrollbar.pack(side="right", fill="y")
+    return texto
+
+
 class FrameInventario(FrameBase):
     def __init__(self, master, **kwargs):
         self.items = []
@@ -106,6 +117,7 @@ class FrameInventario(FrameBase):
             ("Guardar corte", self.guardar_corte, BTN),
             ("Cargar CSV/XLSX", self.cargar_archivo, BTN2),
             ("Comparar archivo", self.comparar_archivo, "#0F766E"),
+            ("Resumen historico", self.mostrar_resumen_historico, "#1D4ED8"),
             ("Eliminar seleccionado", self.eliminar_seleccionado, "#B45309"),
             ("Volver", lambda: self.volver(FrameMenuAdmin), "#777"),
         ]
@@ -118,6 +130,50 @@ class FrameInventario(FrameBase):
 
         formato = "Formato aceptado: articulo/nombre, categoria, total, danadas, costo_unitario/costo, notas."
         tk.Label(parent, text=formato, font=("Arial", 9), bg=BG, fg="#555").pack(anchor="w")
+
+    def mostrar_resumen_historico(self):
+        cortes = GestorArchivos.cargar_cortes_inventario()
+        comparaciones = GestorArchivos.cargar_comparaciones_inventario()
+        resumen = GestorArchivos.resumen_reposicion_inventario()
+
+        ventana = tk.Toplevel(self)
+        ventana.title("Resumen historico de inventario")
+        ventana.geometry("720x500")
+        ventana.configure(bg=BG)
+
+        texto = crear_texto_scroll(ventana)
+
+        texto.insert("end", "RESUMEN HISTORICO DE INVENTARIO\n\n")
+        texto.insert("end", f"Cortes guardados: {len(cortes)}\n")
+        texto.insert("end", f"Comparaciones guardadas: {len(comparaciones)}\n")
+        texto.insert("end", f"Ultimo total a reponer: ${resumen['ultimo_total']:.2f}\n")
+        if resumen["total_comparaciones"] >= 3:
+            texto.insert("end", f"Promedio historico recomendado: ${resumen['promedio']:.2f}\n")
+        else:
+            faltan = 3 - resumen["total_comparaciones"]
+            texto.insert("end", f"Promedio historico pendiente: faltan {faltan} comparacion(es).\n")
+
+        texto.insert("end", "\nULTIMOS CORTES\n")
+        for corte in cortes[-8:]:
+            total_items = len(corte.articulos)
+            total_piezas = sum(item.total for item in corte.articulos)
+            total_danadas = sum(item.danadas for item in corte.articulos)
+            reposicion = corte.costo_reposicion_total()
+            texto.insert("end", f"- {corte.fecha}: {total_items} articulos, {total_piezas} piezas, {total_danadas} danadas, reposicion directa ${reposicion:.2f}\n")
+        if not cortes:
+            texto.insert("end", "Sin cortes guardados.\n")
+
+        texto.insert("end", "\nULTIMAS COMPARACIONES\n")
+        for comparacion in comparaciones[-8:]:
+            fecha = comparacion.get("fecha", "sin fecha")
+            costo = float(comparacion.get("costo_reposicion_total", 0) or 0)
+            articulos = comparacion.get("articulos", [])
+            faltantes = sum(int(item.get("faltantes", 0) or 0) for item in articulos)
+            texto.insert("end", f"- {fecha}: faltantes {faltantes}, costo a reponer ${costo:.2f}\n")
+        if not comparaciones:
+            texto.insert("end", "Sin comparaciones guardadas.\n")
+
+        texto.config(state="disabled")
 
     def agregar_item(self):
         item = self.item_desde_formulario()
@@ -346,8 +402,7 @@ class FrameInventario(FrameBase):
         ventana.geometry("720x420")
         ventana.configure(bg=BG)
 
-        texto = tk.Text(ventana, wrap="word", bg="white", fg=TXT)
-        texto.pack(fill="both", expand=True, padx=12, pady=12)
+        texto = crear_texto_scroll(ventana)
         texto.insert("end", "Comparacion preparada\n\n")
         for nombre in nombres:
             item_actual = actual.get(nombre)

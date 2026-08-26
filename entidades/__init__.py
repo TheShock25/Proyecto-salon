@@ -6,11 +6,18 @@ from .modelos import (
     InventarioCorte,
     InventarioItem,
     Mesa,
+    Mesero,
+    OfertaTrabajo,
     Organizacion,
+    PerfilMesero,
+    Postulacion,
+    ResultadoAnalizador,
+    Salon,
 )
 
 __all__ = [
     "Mesa",
+    "Salon",
     "Evento",
     "Organizacion",
     "Comentario",
@@ -18,4 +25,9 @@ __all__ = [
     "ComentarioEvento",
     "InventarioItem",
     "InventarioCorte",
+    "Mesero",
+    "PerfilMesero",
+    "OfertaTrabajo",
+    "Postulacion",
+    "ResultadoAnalizador",
 ]

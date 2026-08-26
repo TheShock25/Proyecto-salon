@@ -8,6 +8,7 @@ from .login import FrameLogin
 from .menus import FrameMenuAdmin, FrameMenuCapitan, FrameMenuMesero
 from .mesero import FrameComentariosMesero, FrameEstadisticas
 from .patron import FrameCalendario, FrameSeleccionFecha
+from .perfil_salon import FramePerfilSalon
 
 __all__ = [
     "Aplicacion",
@@ -21,6 +22,7 @@ __all__ = [
     "FrameCalendario",
     "FrameInventario",
     "FrameDashboardPatron",
+    "FramePerfilSalon",
     "FrameListaEventos",
     "FrameListaOrganizaciones",
     "FrameCompararEventos",

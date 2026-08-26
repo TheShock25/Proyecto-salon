@@ -18,6 +18,7 @@ def resolver_frame(nombre):
         "FrameCalendario": "pantallas.patron",
         "FrameInventario": "pantallas.inventario",
         "FrameDashboardPatron": "pantallas.dashboard_patron",
+        "FramePerfilSalon": "pantallas.perfil_salon",
         "FrameCroquis": "pantallas.croquis",
         "FrameListaEventos": "pantallas.capitan",
         "FrameListaOrganizaciones": "pantallas.capitan",
@@ -41,6 +42,7 @@ FrameSeleccionFecha = LazyFrame("FrameSeleccionFecha")
 FrameCalendario = LazyFrame("FrameCalendario")
 FrameInventario = LazyFrame("FrameInventario")
 FrameDashboardPatron = LazyFrame("FrameDashboardPatron")
+FramePerfilSalon = LazyFrame("FramePerfilSalon")
 FrameCroquis = LazyFrame("FrameCroquis")
 FrameListaEventos = LazyFrame("FrameListaEventos")
 FrameListaOrganizaciones = LazyFrame("FrameListaOrganizaciones")
@@ -57,6 +59,7 @@ __all__ = [
     "FrameCalendario",
     "FrameInventario",
     "FrameDashboardPatron",
+    "FramePerfilSalon",
     "FrameCroquis",
     "FrameListaEventos",
     "FrameListaOrganizaciones",

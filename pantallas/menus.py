@@ -23,6 +23,7 @@ class FrameMenuAdmin(FrameBase):
             ("Nueva reservacion", "Apartar fecha y preparar el croquis del evento.", BTN, lambda: self.volver(FrameSeleccionFecha)),
             ("Calendario de eventos", "Revisar fechas ocupadas y eventos guardados.", "#0F766E", lambda: self.volver(FrameCalendario)),
             ("Inventario y costos", "Capturar articulos, reposicion y comparaciones.", "#7C3AED", lambda: self.volver(FrameInventario)),
+            ("Perfil del salon", "Guardar contacto, zona, logo y precios aproximados.", "#B45309", lambda: self.volver(FramePerfilSalon)),
             ("Estadisticas del salon", "Ver tendencias generales del salon y clientes.", "#1D4ED8", lambda: self.volver(FrameDashboardPatron)),
         ]
 

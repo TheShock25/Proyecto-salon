@@ -1,7 +1,7 @@
 # constantes.py
 
 # Configuración del croquis
-CELL = 90
+CELL = 80
 FILAS = 5
 COLUMNAS = 6
 MESES_POR_PAGINA = 6
@@ -20,6 +20,7 @@ ARCHIVO_COMENTARIOS_MESERO = "comentarios_mesero.json"
 ARCHIVO_COMENTARIOS_EVENTO = "comentarios_evento.json"
 ARCHIVO_INVENTARIO = "inventario.json"
 ARCHIVO_COMPARACIONES_INVENTARIO = "comparaciones_inventario.json"
+ARCHIVO_BD = "salon.db"
 CARPETA_EXPORTS = "exports"
 CARPETA_INVENTARIOS = "inventarios"
 ARCHIVO_EVENTOS_CSV = "exports/eventos.csv"

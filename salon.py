@@ -1011,8 +1011,8 @@ def mostrar_evento(evento, org_existente=None, modo="capitan"):
     canvas.create_rectangle(2*CELL, 0, 4*CELL, CELL*0.7, fill="brown")
     canvas.create_text(3*CELL, 0.35*CELL, text=f"Principal\n{evento['principal']}", fill="white")
 
-    canvas.create_rectangle(2*CELL, 1*CELL, 4*CELL, 4*CELL, fill="black")
-    canvas.create_text(3*CELL, 2.5*CELL, text="PISTA", fill="white")
+    canvas.create_rectangle(2*CELL, 1*CELL, 4*CELL, 3*CELL, fill="black")
+    canvas.create_text(3*CELL, 2*CELL, text="PISTA", fill="white")
 
     mapa = {(m["col"], m["fila"]): m for m in evento["mesas"]}
     mesas_ids = {}
@@ -1039,7 +1039,7 @@ def mostrar_evento(evento, org_existente=None, modo="capitan"):
 
     for fila in range(1, FILAS+1):
         for col in range(1, COLUMNAS+1):
-            if 3 <= col <= 4 and 1 <= fila <= 3:
+            if 3 <= col <= 4 and 1 <= fila <= 2:
                 continue
             if (col, fila) in mapa:
                 m = mapa[(col, fila)]
@@ -1685,8 +1685,8 @@ def vista_croquis(modo="demo",fecha=None):
 
     canvas.tag_bind(mp,"<Button-1>",editar_principal)
 
-    canvas.create_rectangle(2*CELL,1*CELL,4*CELL,4*CELL,fill="black")
-    canvas.create_text(3*CELL,2.5*CELL,text="PISTA",fill="white")
+    canvas.create_rectangle(2*CELL,1*CELL,4*CELL,3*CELL,fill="black")
+    canvas.create_text(3*CELL,2*CELL,text="PISTA",fill="white")
 
     valores_mesas.clear()
     asociaciones_colores.clear()
@@ -1726,7 +1726,7 @@ def vista_croquis(modo="demo",fecha=None):
     prioridad=[]
     for f in range(1,5): prioridad.append((2,f))
     for f in range(1,5): prioridad.append((5,f))
-    prioridad += [(3,4),(4,4),(3,5),(4,5),(2,5),(5,5)]
+    prioridad += [(3,3),(4,3),(3,4),(4,4),(3,5),(4,5),(2,5),(5,5)]
 
     def calcular():
         global total_invitados
@@ -1900,8 +1900,8 @@ def dibujar_croquis(frame,evento,scale=1.0):
     canvas.create_text(sx(3*CELL),sy(20+0.35*CELL),
                        text=f"Principal\n{evento['principal']}",fill="white")
 
-    canvas.create_rectangle(sx(2*CELL),sy(1*CELL+20),sx(4*CELL),sy(4*CELL+20),fill="black")
-    canvas.create_text(sx(3*CELL),sy(2.5*CELL+20),text="PISTA",fill="white")
+    canvas.create_rectangle(sx(2*CELL),sy(1*CELL+20),sx(4*CELL),sy(3*CELL+20),fill="black")
+    canvas.create_text(sx(3*CELL),sy(2*CELL+20),text="PISTA",fill="white")
 
     mapa={(m["col"],m["fila"]):m for m in evento["mesas"]}
 

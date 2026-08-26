@@ -16,6 +16,22 @@ COLOR_MESA = "#E5E7EB"
 COLOR_PRINCIPAL = "#8B5E34"
 COLOR_PISTA = "#111827"
 COLOR_PANEL = "#FFFFFF"
+COLOR_SERVICIO_ACTIVO = "#10B981"
+COLOR_SERVICIO_INACTIVO = "#CBD5E1"
+COLOR_NINOS = "#F59E0B"
+
+SERVICIOS_FIJOS = {
+    "cocina": {"texto": "COCINA", "lado": "izquierda", "fila": 3, "siempre": False},
+    "barra": {"texto": "BARRA", "lado": "izquierda", "fila": 4, "siempre": False},
+    "pantalla": {"texto": "PANT.", "lado": "derecha", "fila": 1, "siempre": False},
+    "mesa_pastel": {"texto": "PASTEL", "lado": "derecha", "fila": 2, "siempre": False},
+    "dulces": {"texto": "DULCES", "lado": "derecha", "fila": 3, "siempre": False},
+            "area_fotos": {"texto": "FOTOS", "lado": "derecha", "fila": 5, "siempre": True},
+}
+
+
+def mesas_visibles_evento(evento):
+    return list(evento.mesas)
 
 
 def crear_boton(parent, text, command, bg=BTN, width=20):
@@ -52,6 +68,9 @@ class FrameCroquis(FrameBase):
         self.conteo_meseros = {}
         self.nombres_meseros = {}
         self.mesas_ids = {}
+        self.mesas_editadas_manual = set()
+        self.vars_servicios = {}
+        self.orden_prioridad = []
         super().__init__(master, **kwargs)
 
     def configurar(self):
@@ -103,7 +122,7 @@ class FrameCroquis(FrameBase):
         # ===== CANVAS =====
         self.canvas = tk.Canvas(
             frame_left,
-            width=COLUMNAS*CELL,
+            width=(COLUMNAS+2)*CELL,
             height=(FILAS+1)*CELL,
             bg=COLOR_PISO,
             highlightbackground=COLOR_BORDE,
@@ -131,21 +150,45 @@ class FrameCroquis(FrameBase):
     def dibujar_elementos_fijos(self):
         """Dibuja la mesa principal y la pista."""
         # Mesa principal (siempre visible)
-        self.mp = self.canvas.create_rectangle(2*CELL, 0, 4*CELL, int(CELL*0.7), fill=COLOR_PRINCIPAL, outline="#6B3F1D", width=2)
-        self.texto_mp = self.canvas.create_text(3*CELL, int(CELL*0.35), 
+        self.mp = self.canvas.create_rectangle(3*CELL, 0, 5*CELL, int(CELL*0.7), fill=COLOR_PRINCIPAL, outline="#6B3F1D", width=2)
+        self.texto_mp = self.canvas.create_text(4*CELL, int(CELL*0.35), 
                                                 text=f"Principal\n{self.mesa_principal_valor}", 
                                                 fill="white", font=("Arial", 10, "bold"))
         
         if self.modo in ["demo", "anfitrion"]:
             self.canvas.tag_bind(self.mp, "<Button-1>", self.editar_principal)
 
-        # Pista - ocupa columnas 3 y 4, filas 1 a 3.
-        self.canvas.create_rectangle(2*CELL, 1*CELL, 4*CELL, 4*CELL, fill=COLOR_PISTA, outline="#030712", width=2)
-        self.canvas.create_text(3*CELL, int(2.5*CELL), text="PISTA", fill="white", font=("Arial", 12, "bold"))
+        # Pista - ocupa columnas 3 y 4, filas 1 y 2.
+        self.canvas.create_rectangle(3*CELL, 1*CELL, 5*CELL, 3*CELL, fill=COLOR_PISTA, outline="#030712", width=2)
+        self.canvas.create_text(4*CELL, int(2*CELL), text="PISTA", fill="white", font=("Arial", 12, "bold"))
+
+        self.dibujar_servicios_fijos()
+
+    def dibujar_servicios_fijos(self):
+        self.canvas.delete("servicio_fijo")
+        servicios = self.servicios_para_croquis()
+        for clave, config in SERVICIOS_FIJOS.items():
+            fila = config["fila"]
+            if config["lado"] == "izquierda":
+                x1 = 7
+                x2 = CELL - 7
+            else:
+                x1 = (COLUMNAS + 1) * CELL + 7
+                x2 = (COLUMNAS + 2) * CELL - 7
+            y1 = fila * CELL + 10
+            y2 = (fila + 1) * CELL - 10
+            activo = True if config["siempre"] else bool(servicios.get(clave, False))
+            fill = COLOR_SERVICIO_ACTIVO if activo else COLOR_SERVICIO_INACTIVO
+            outline = "#047857" if activo else "#94A3B8"
+            self.canvas.create_rectangle(x1, y1, x2, y2, fill=fill, outline=outline, width=2,
+                                         tags=("servicio_fijo",))
+            self.canvas.create_text((x1 + x2) // 2, (y1 + y2) // 2,
+                                    text=config["texto"], fill="white" if activo else "#475569",
+                                    font=("Arial", 8, "bold"), tags=("servicio_fijo",))
 
     def crear_mesa(self, col, fila):
         """Crea una mesa en la posición especificada (visible por defecto)."""
-        x1 = (col-1)*CELL
+        x1 = col*CELL
         y1 = fila*CELL
         x2 = x1+CELL
         y2 = y1+CELL
@@ -159,17 +202,15 @@ class FrameCroquis(FrameBase):
             "texto": texto,
             "valor": 0,
             "nombre": None,
-            "color": "lightgray"
+            "color": "lightgray",
+            "adultos": None,
+            "ninos": 0,
         }
         self.mesas_ids[(col, fila)] = mesa
 
         if self.modo in ["demo", "anfitrion"]:
             def editar(event, c=col, f=fila):
-                v = simpledialog.askinteger("Mesa", "Personas (0-12):", minvalue=0, maxvalue=12)
-                if v is not None:
-                    self.valores_mesas[(c, f)]["valor"] = v
-                    self.canvas.itemconfig(texto, text=str(v))
-                    self.actualizar_contador()
+                self.editar_mesa_personas(c, f)
 
             self.canvas.tag_bind(mesa, "<Button-1>", editar)
 
@@ -190,9 +231,193 @@ class FrameCroquis(FrameBase):
         """Crea todas las mesas en el canvas (visibles por defecto)."""
         for fila in range(1, FILAS+1):
             for col in range(1, COLUMNAS+1):
-                if 3 <= col <= 4 and 1 <= fila <= 3:
+                if 3 <= col <= 4 and 1 <= fila <= 2:
                     continue
                 self.crear_mesa(col, fila)
+
+    def obtener_prioridad_mesas(self):
+        prioridad = [
+            (2,1), (2,2), (2,3), (5,1), (5,2), (5,3),
+            (3,3), (4,3),
+            (3,4), (4,4), (2,4), (5,4),
+            (1,1), (6,1),
+            (1,2), (6,2),
+            (1,3), (6,3),
+            (1,4), (6,4),
+            (3,5), (4,5), (2,5), (5,5), (1,5), (6,5)
+        ]
+        return prioridad
+
+    def menu_infantil_activo(self):
+        if "menu_infantil" in self.vars_servicios:
+            return bool(self.vars_servicios["menu_infantil"].get())
+        if self.evento:
+            return bool(getattr(self.evento, "servicios", {}).get("menu_infantil", False))
+        return False
+
+    def texto_mesa_valores(self, info):
+        adultos = info.get("adultos")
+        ninos = int(info.get("ninos") or 0)
+        if self.menu_infantil_activo() and (ninos > 0 or adultos is not None):
+            adultos = int(adultos if adultos is not None else max(info["valor"] - ninos, 0))
+            return f"{adultos} ad\n{ninos} n"
+        return str(info["valor"])
+
+    def normalizar_split_mesa(self, info):
+        if not self.menu_infantil_activo():
+            info["adultos"] = None
+            info["ninos"] = 0
+            return
+        if info.get("color") == COLOR_NINOS and info["valor"] > 0:
+            info["adultos"] = 0
+            info["ninos"] = info["valor"]
+            info["nombre"] = info.get("nombre") or "Ninos"
+        elif info.get("adultos") is not None or info.get("ninos"):
+            ninos = min(int(info.get("ninos") or 0), info["valor"])
+            info["ninos"] = ninos
+            info["adultos"] = max(info["valor"] - ninos, 0)
+
+    def editar_mesa_personas(self, col, fila):
+        info = self.valores_mesas[(col, fila)]
+        if self.menu_infantil_activo() and self.color_actual == COLOR_NINOS:
+            ninos = simpledialog.askinteger(
+                "Mesa infantil",
+                "Ninos en esta mesa (0-12):",
+                initialvalue=info.get("ninos") or info["valor"] or 0,
+                minvalue=0,
+                maxvalue=12,
+            )
+            if ninos is None:
+                return
+            info["valor"] = ninos
+            info["adultos"] = 0
+            info["ninos"] = ninos
+            info["color"] = COLOR_NINOS
+            info["nombre"] = info["nombre"] or "Ninos"
+            self.canvas.itemconfig(info["mesa"], fill=COLOR_NINOS if ninos else COLOR_MESA)
+        elif self.menu_infantil_activo():
+            adultos = simpledialog.askinteger(
+                "Mesa mixta",
+                "Adultos en esta mesa:",
+                initialvalue=info.get("adultos") if info.get("adultos") is not None else info["valor"],
+                minvalue=0,
+                maxvalue=12,
+            )
+            if adultos is None:
+                return
+            max_ninos = 12 - adultos
+            ninos = simpledialog.askinteger(
+                "Mesa mixta",
+                f"Ninos en esta mesa (0-{max_ninos}):",
+                initialvalue=min(info.get("ninos") or 0, max_ninos),
+                minvalue=0,
+                maxvalue=max_ninos,
+            )
+            if ninos is None:
+                return
+            info["adultos"] = adultos
+            info["ninos"] = ninos
+            info["valor"] = adultos + ninos
+        else:
+            v = simpledialog.askinteger("Mesa", "Personas (0-12):", minvalue=0, maxvalue=12)
+            if v is None:
+                return
+            info["valor"] = v
+            info["adultos"] = None
+            info["ninos"] = 0
+
+        if info["valor"] == 0:
+            info["adultos"] = None
+            info["ninos"] = 0
+            if info["color"] == COLOR_NINOS:
+                info["color"] = "lightgray"
+                info["nombre"] = None
+                self.canvas.itemconfig(info["mesa"], fill=COLOR_MESA)
+
+        self.mesas_editadas_manual.add((col, fila))
+        self.actualizar_mesa_canvas(col, fila)
+        self.rebalancear_invitados((col, fila))
+
+    def actualizar_mesa_canvas(self, col, fila):
+        info = self.valores_mesas.get((col, fila))
+        if not info:
+            return
+        self.canvas.itemconfig(info["texto"], text=self.texto_mesa_valores(info))
+
+    def rebalancear_invitados(self, mesa_editada):
+        if self.total_invitados <= 0:
+            self.actualizar_contador()
+            return
+
+        usados = self.mesa_principal_valor + sum(i["valor"] for i in self.valores_mesas.values())
+        diferencia = usados - self.total_invitados
+        if diferencia == 0:
+            self.actualizar_contador()
+            return
+
+        prioridad = self.orden_prioridad or self.obtener_prioridad_mesas()
+        if diferencia > 0:
+            por_quitar = diferencia
+            for pos in reversed(prioridad):
+                if pos == mesa_editada:
+                    continue
+                info = self.valores_mesas.get(pos)
+                if not info or info["valor"] <= 0:
+                    continue
+                quitar = min(info["valor"], por_quitar)
+                info["valor"] -= quitar
+                self.normalizar_split_mesa(info)
+                self.actualizar_mesa_canvas(*pos)
+                por_quitar -= quitar
+                if por_quitar == 0:
+                    break
+        else:
+            por_agregar = abs(diferencia)
+            parciales = [pos for pos in reversed(prioridad)
+                         if pos != mesa_editada
+                         and self.valores_mesas.get(pos)
+                         and 0 < self.valores_mesas[pos]["valor"] < 10]
+            vacias = [pos for pos in prioridad
+                      if pos != mesa_editada
+                      and self.valores_mesas.get(pos)
+                      and self.valores_mesas[pos]["valor"] == 0]
+            for pos in parciales + vacias:
+                info = self.valores_mesas[pos]
+                espacio = 10 - info["valor"]
+                if espacio <= 0:
+                    continue
+                agregar = min(espacio, por_agregar)
+                info["valor"] += agregar
+                self.normalizar_split_mesa(info)
+                self.actualizar_mesa_canvas(*pos)
+                por_agregar -= agregar
+                if por_agregar == 0:
+                    break
+
+        self.actualizar_contador()
+
+    def texto_mesa_evento(self, mesa):
+        if bool(getattr(self.evento, "servicios", {}).get("menu_infantil", False)) and (getattr(mesa, "ninos", 0) > 0 or getattr(mesa, "adultos", None) is not None):
+            adultos = getattr(mesa, "adultos", max(mesa.personas - getattr(mesa, "ninos", 0), 0))
+            ninos = getattr(mesa, "ninos", 0)
+            texto_personas = f"{adultos} ad\n{ninos} n"
+            if self.modo == "capitan" and mesa.nombre:
+                nombre = str(mesa.nombre)
+                if len(nombre) > 8:
+                    nombre = nombre[:7] + "."
+                return f"{texto_personas}\n{nombre}"
+            return texto_personas
+        if self.modo == "capitan" and mesa.nombre:
+            nombre = str(mesa.nombre)
+            if len(nombre) > 10:
+                nombre = nombre[:9] + "."
+            return f"{mesa.personas}\n{nombre}"
+        return str(mesa.personas)
+
+    def color_mesa_evento(self, mesa):
+        if self.modo == "capitan":
+            return COLOR_MESA
+        return mesa.color if mesa.color != "lightgray" else COLOR_MESA
 
     def editar_principal(self, event):
         """Edita el valor de la mesa principal."""
@@ -200,7 +425,7 @@ class FrameCroquis(FrameBase):
         if v:
             self.mesa_principal_valor = v
             self.canvas.itemconfig(self.texto_mp, text=f"Principal\n{v}")
-            self.actualizar_contador()
+            self.rebalancear_invitados(None)
 
     def calcular(self):
         """Calcula la distribución automática de invitados con el orden correcto."""
@@ -216,35 +441,31 @@ class FrameCroquis(FrameBase):
             messagebox.showwarning("Advertencia", "El total de invitados es menor que la mesa principal")
             restantes = 0
 
-        # ORDEN DE PRIORIDAD CORREGIDO:
-        prioridad = [
-            (2,1), (2,2), (2,3), (5,1), (5,2), (5,3),  # Alrededor pista
-            (3,4), (4,4), (2,4), (5,4),                   # Fila 4
-            (1,1), (6,1),                                  # Extremos fila 1
-            (1,2), (6,2),                                  # Extremos fila 2
-            (1,3), (6,3),                                  # Extremos fila 3
-            (1,4), (6,4),                                  # Extremos fila 4
-            (3,5), (4,5), (2,5), (5,5), (1,5), (6,5)      # Fila 5
-        ]
+        self.orden_prioridad = self.obtener_prioridad_mesas()
+        self.mesas_editadas_manual.clear()
 
         # Resetear valores de todas las mesas a 0
         for info in self.valores_mesas.values():
             info["valor"] = 0
             info["nombre"] = None
             info["color"] = "lightgray"
+            info["adultos"] = None
+            info["ninos"] = 0
             self.canvas.itemconfig(info["texto"], text="0")
             self.canvas.itemconfig(info["mesa"], fill=COLOR_MESA)
             # No ocultamos las mesas, solo reseteamos sus valores
 
         # Asignar personas a las mesas según prioridad
-        for (col, fila) in prioridad:
+        for (col, fila) in self.orden_prioridad:
             if restantes <= 0:
                 break
             if (col, fila) in self.valores_mesas:
                 asignar = min(10, restantes)
                 info = self.valores_mesas[(col, fila)]
                 info["valor"] = asignar
-                self.canvas.itemconfig(info["texto"], text=str(asignar))
+                info["adultos"] = None
+                info["ninos"] = 0
+                self.actualizar_mesa_canvas(col, fila)
                 restantes -= asignar
 
         self.actualizar_contador()
@@ -279,6 +500,15 @@ class FrameCroquis(FrameBase):
                 font=("Arial", 14, "bold"), bg=COLOR_PANEL, fg=TXT).pack(pady=(0, 4))
         tk.Label(self.frame_right, text="Selecciona un color, ponle nombre y marca sus mesas.",
                 font=("Arial", 9), bg=COLOR_PANEL, fg="#555", wraplength=240, justify="center").pack(pady=(0, 10))
+
+        sugeridos = self.meseros_sugeridos()
+        tk.Label(self.frame_right, text=f"Sugerencia: {sugeridos} mesero(s)",
+                font=("Arial", 11, "bold"), bg="#ECFDF5", fg="#047857",
+                padx=8, pady=5).pack(fill="x", pady=(0, 8))
+        tk.Label(self.frame_right, text="Base: 1 mesero por cada 2 mesas. Ajustable por criterio del capitan.",
+                font=("Arial", 8), bg=COLOR_PANEL, fg="#555", wraplength=240, justify="left").pack(anchor="w", pady=(0, 6))
+
+        self.mostrar_servicios_evento(self.frame_right, bg=COLOR_PANEL)
 
         colores = ["red", "blue", "green", "yellow", "orange", "pink", "purple", 
                    "cyan", "magenta", "brown", "gray", "lime", "gold", "navy", 
@@ -331,6 +561,12 @@ class FrameCroquis(FrameBase):
                 font=("Arial", 9), bg=COLOR_PANEL, fg="#555", justify="left").pack(pady=10, anchor="w")
 
         self.bind_eventos_pintar()
+
+    def meseros_sugeridos(self):
+        if not self.evento:
+            return 0
+        mesas = len([mesa for mesa in self.evento.mesas if mesa.personas > 0])
+        return max(1, (mesas + 1) // 2) if mesas else 0
 
     def texto_color_mesero(self, color):
         nombre = self.nombres_meseros.get(color)
@@ -392,6 +628,8 @@ class FrameCroquis(FrameBase):
         tk.Label(self.frame_right, text="Elige un color y da clic derecho en una mesa para nombrarla.",
                 font=("Arial", 9), bg=COLOR_PANEL, fg="#555", wraplength=230, justify="center").pack(pady=(0, 12))
 
+        self.configurar_servicios_anfitrion()
+
         frame_pal = tk.Frame(self.frame_right, bg=COLOR_PANEL)
         frame_pal.pack(fill="x")
 
@@ -417,7 +655,87 @@ class FrameCroquis(FrameBase):
 
         tk.Label(self.frame_right, 
                 text="Click izquierdo: cambiar personas\nClick derecho: poner nombre",
-                font=("Arial", 9), bg=COLOR_PANEL, fg="#555", justify="left").pack(pady=(14, 0), anchor="w")
+                font=("Arial", 9), bg=COLOR_PANEL, fg="#555", justify="left").pack(pady=(10, 0), anchor="w")
+
+    def etiquetas_servicios(self):
+        return [
+            ("pantalla", "Pantalla"),
+            ("mesa_pastel", "Mesa de pastel"),
+            ("dulces", "Mesa de dulces"),
+            ("cocina", "Cocina / comida del salon"),
+            ("barra", "Barra"),
+            ("area_fotos", "Area de fotos"),
+            ("animador", "Animador / extra"),
+            ("menu_infantil", "Menu infantil"),
+        ]
+
+    def servicios_actuales_evento(self):
+        if self.evento:
+            return getattr(self.evento, "servicios", {})
+        return {}
+
+    def servicios_para_croquis(self):
+        if self.vars_servicios:
+            servicios = {clave: var.get() for clave, var in self.vars_servicios.items()}
+        else:
+            servicios = dict(self.servicios_actuales_evento())
+        servicios["area_fotos"] = True
+        return servicios
+
+    def configurar_servicios_anfitrion(self):
+        frame_servicios = tk.Frame(self.frame_right, bg=COLOR_PANEL)
+        frame_servicios.pack(fill="x", pady=(0, 12))
+        tk.Label(frame_servicios, text="Servicios rentados",
+                 font=("Arial", 11, "bold"), bg=COLOR_PANEL, fg=TXT).pack(anchor="w")
+
+        servicios = self.servicios_actuales_evento()
+        frame_checks = tk.Frame(frame_servicios, bg=COLOR_PANEL)
+        frame_checks.pack(fill="x", pady=(2, 0))
+        textos_cortos = {
+            "pantalla": "Pantalla",
+            "mesa_pastel": "Pastel",
+            "dulces": "Dulces",
+            "cocina": "Cocina",
+            "barra": "Barra",
+            "area_fotos": "Fotos",
+            "animador": "Animador",
+            "menu_infantil": "Menu infantil",
+        }
+        for indice, (clave, texto) in enumerate(self.etiquetas_servicios()):
+            var = tk.BooleanVar(value=bool(servicios.get(clave, False)))
+            if clave == "area_fotos":
+                var.set(True)
+            self.vars_servicios[clave] = var
+            check = tk.Checkbutton(
+                frame_checks,
+                text=textos_cortos.get(clave, texto),
+                variable=var,
+                bg=COLOR_PANEL,
+                fg=TXT,
+                activebackground=COLOR_PANEL,
+                anchor="w",
+                selectcolor=COLOR_PANEL,
+                padx=0,
+                pady=0,
+                command=self.dibujar_servicios_fijos,
+            )
+            if clave == "area_fotos":
+                check.configure(state="disabled")
+            check.grid(row=indice // 2, column=indice % 2, sticky="w", padx=(0, 10), pady=1)
+
+    def obtener_servicios_seleccionados(self):
+        return {clave: var.get() for clave, var in self.vars_servicios.items()}
+
+    def mostrar_servicios_evento(self, parent, bg=COLOR_PANEL):
+        if not self.evento:
+            return
+        servicios = getattr(self.evento, "servicios", {})
+        tk.Label(parent, text="Servicios del evento",
+                 font=("Arial", 11, "bold"), bg=bg, fg=TXT).pack(anchor="w", pady=(14, 4))
+        for clave, texto in self.etiquetas_servicios():
+            estado = "Si" if servicios.get(clave, False) else "No"
+            tk.Label(parent, text=f"{texto}: {estado}",
+                     font=("Arial", 10), bg=bg, fg="#555", anchor="w").pack(fill="x")
 
     def configurar_panel_mesero(self):
         """Configura el panel para el mesero - SOLO VISUALIZACIÓN."""
@@ -480,10 +798,12 @@ class FrameCroquis(FrameBase):
             
             tk.Label(self.frame_right, text=f"Mesa Principal: {self.evento.principal} personas",
                     font=("Arial", 11), bg=BG).pack(pady=5)
-            tk.Label(self.frame_right, text=f"Total Mesas: {len(self.evento.mesas)}",
+            tk.Label(self.frame_right, text=f"Total Mesas: {len(mesas_visibles_evento(self.evento))}",
                     font=("Arial", 11), bg=BG).pack(pady=5)
             tk.Label(self.frame_right, text=f"Total Invitados: {self.evento.total_invitados()}",
                     font=("Arial", 12, "bold"), bg=BG).pack(pady=10)
+
+            self.mostrar_servicios_evento(self.frame_right, bg=BG)
 
             if self.organizacion:
                 tk.Label(self.frame_right, text="Organización:", 
@@ -564,18 +884,18 @@ class FrameCroquis(FrameBase):
             messagebox.showerror("Error", "Debes calcular primero")
             return
 
-        # Crear lista de mesas (SOLO las que tienen al menos 2 personas)
+        # Crear lista de mesas (SOLO las que tienen personas)
         mesas_guardar = []
         for (c, f), info in self.valores_mesas.items():
-            if info["valor"] >= 2:
+            if info["valor"] >= 1:
                 mesas_guardar.append(Mesa(c, f, info["valor"], info["nombre"], info["color"]))
         
         # Validar que haya al menos una mesa
         if not mesas_guardar:
-            messagebox.showwarning("Advertencia", "No hay mesas con suficientes personas (mínimo 2)")
+            messagebox.showwarning("Advertencia", "No hay mesas con personas")
             return
         
-        evento = Evento(self.fecha, self.mesa_principal_valor, mesas_guardar)
+        evento = Evento(self.fecha, self.mesa_principal_valor, mesas_guardar, self.obtener_servicios_seleccionados())
         GestorArchivos.guardar_evento(evento)
         messagebox.showinfo("Evento", f"Evento guardado exitosamente con {len(mesas_guardar)} mesas")
         self.volver(FrameMenuAdmin)
@@ -630,10 +950,10 @@ class FrameCroquis(FrameBase):
                 
                 # Mostrar la mesa
                 self.canvas.itemconfig(info["mesa"], state="normal", 
-                                      fill=mesa.color if mesa.color != "lightgray" else "lightgray")
-                self.canvas.itemconfig(info["texto"], state="normal", text=str(mesa.personas))
+                                      fill=self.color_mesa_evento(mesa))
+                self.canvas.itemconfig(info["texto"], state="normal", text=self.texto_mesa_evento(mesa))
                 
-                if mesa.nombre:
+                if mesa.nombre and self.modo != "capitan":
                     self.asociaciones_colores[mesa.color] = mesa.nombre
 
         self.actualizar_contador()
