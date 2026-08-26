@@ -125,4 +125,4 @@ python main.py
 
 ## 5. Mantenimiento y Contacto
 
-Proyecto desarrollado y mantenido por **Hugo** ([TheShock25](https://github.com/TheShock25)).
+Proyecto desarrollado y mantenido por **Hugo Ayala Alatriste** ([TheShock25](https://github.com/TheShock25)).
